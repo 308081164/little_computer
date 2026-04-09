@@ -1,0 +1,2 @@
+# little_computer
+这是一个由cursor在云端生成创建的项目
