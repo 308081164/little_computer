@@ -15,72 +15,102 @@ DISPLAY_BG = "#FFF9C4"
 
 PIXEL_SCALE = 3
 CAT_COLORS = {
-    "B": "#3A314B",
-    "F": "#FFDFF0",
-    "E": "#FF9BC4",
-    "K": "#2A1F37",
-    "M": "#D86F92",
+    "O": "#3A314B",
+    "H": "#A67AF4",
+    "C": "#FFB6D8",
+    "S": "#FDE1D2",
+    "R": "#F56CA8",
+    "D": "#8DD8C6",
+    "E": "#2A1F37",
+    "B": "#F7A1C6",
+    "M": "#BA517D",
+    "X": "#C83E66",
+    "L": "#6E4BB3",
 }
 CAT_SPRITES = {
     "idle": [
-        "...BB......BB...",
-        "..BFFB....BFFB..",
-        "..BFFFBBBBFFFB..",
-        ".BFFFFFFFFFFFFB.",
-        ".BFFKFFFFFKFFFB.",
-        ".BFFFFFFFFFFFFB.",
-        ".BFFFBBBBBBFFFB.",
-        "..BFFB....BFFB..",
-        "..BFB......BFB..",
-        "..BB........BB..",
+        "..OO....OO......",
+        ".OHHO..OHHO.....",
+        ".OHCHOOHCHO.....",
+        "OHHHHHHHHHHO....",
+        "OHHSSSSSSHHO....",
+        "OHSESSSSESHO....",
+        "OHSSBBBBSSHO....",
+        ".OHRRDDRRHO.....",
+        ".OHDDDDDDHO.....",
+        "..ODDOODDO......",
+        "..OO..OO..OO....",
+        "...O....O.......",
     ],
     "blink": [
-        "...BB......BB...",
-        "..BFFB....BFFB..",
-        "..BFFFBBBBFFFB..",
-        ".BFFFFFFFFFFFFB.",
-        ".BFFKFFFFFKFFFB.",
-        ".BFFBBBBBBBBFFB.",
-        ".BFFFFFFFFFFFFB.",
-        "..BFFB....BFFB..",
-        "..BFB......BFB..",
-        "..BB........BB..",
+        "..OO....OO......",
+        ".OHHO..OHHO.....",
+        ".OHCHOOHCHO.....",
+        "OHHHHHHHHHHO....",
+        "OHHSSSSSSHHO....",
+        "OHSLSSMSSLHO....",
+        "OHSSBBBBSSHO....",
+        ".OHRRDDRRHO.....",
+        ".OHDDDDDDHO.....",
+        "..ODDOODDO......",
+        "..OO..OO..OO....",
+        "...O....O.......",
     ],
     "walk_a": [
-        "...BB......BB...",
-        "..BFFB....BFFB..",
-        "..BFFFBBBBFFFB..",
-        ".BFFFFFFFFFFFFB.",
-        ".BFFKFFFFFKFFFB.",
-        ".BFFFFFFFFFFFFB.",
-        ".BFFFBBBBBBFFFB.",
-        "..BFFB....BFFB..",
-        "..BFB....B..FB..",
-        "..BB......BB....",
+        "..OO....OO......",
+        ".OHHO..OHHO.....",
+        ".OHCHOOHCHO.....",
+        "OHHHHHHHHHHO....",
+        "OHHSSSSSSHHO....",
+        "OHSESSSSESHO....",
+        "OHSSBBBBSSHO....",
+        ".OHRRDDRRHO.....",
+        ".OHDDDDDDHO.....",
+        "..ODDOODDO......",
+        "..OO.OO..OO.....",
+        "...O.....O......",
     ],
     "walk_b": [
-        "...BB......BB...",
-        "..BFFB....BFFB..",
-        "..BFFFBBBBFFFB..",
-        ".BFFFFFFFFFFFFB.",
-        ".BFFKFFFFFKFFFB.",
-        ".BFFFFFFFFFFFFB.",
-        ".BFFFBBBBBBFFFB.",
-        "..BFFB....BFFB..",
-        "..BF..BFB....B..",
-        "....BB......BB..",
+        "..OO....OO......",
+        ".OHHO..OHHO.....",
+        ".OHCHOOHCHO.....",
+        "OHHHHHHHHHHO....",
+        "OHHSSSSSSHHO....",
+        "OHSESSSSESHO....",
+        "OHSSBBBBSSHO....",
+        ".OHRRDDRRHO.....",
+        ".OHDDDDDDHO.....",
+        "..ODDOODDO......",
+        "..OO..OO.OO.....",
+        "...O......O.....",
     ],
     "sleep": [
         "................",
-        "...BBBBBBBBBB...",
-        "..BFFFFFFFFFFB..",
-        ".BFFFFFFFFFFFFB.",
-        ".BFFBBBBBBBBFFB.",
-        ".BFFFFFFFFFFFFB.",
-        ".BFFBEEFFEEBFFB.",
-        "..BFFBBBBBBFFB..",
-        "...BB......BB...",
+        "....OOOOOOOO....",
+        "...OHHHHHHHHO...",
+        "..OHSSSSSSSSHO..",
+        "..OHSLSSMSSLHO..",
+        "..OHSSBBBBSSHO..",
+        "...OHRRDDRRHO...",
+        "...OHDDDDDDHO...",
+        "....OO....OO....",
+        "....DDDDDDDD....",
         "................",
+        "................",
+    ],
+    "shock": [
+        "..OO....OO......",
+        ".OHHO..OHHO.....",
+        ".OHCHOOHCHO.....",
+        "OHHHHHHHHHHO....",
+        "OHHSSSSSSHHO....",
+        "OHSXSSMMSSXHO...",
+        "OHSSBBBBSSHO....",
+        ".OHRRDDRRHO.....",
+        ".OHDDDDDDHO.....",
+        "..ODDOODDO......",
+        "..OO..OO..OO....",
+        "...O....O.......",
     ],
 }
 
@@ -111,6 +141,10 @@ class CalculatorApp:
         self.cat_tick = 0
         self.cat_push_ticks = 0
         self.cat_sleep_ticks = 0
+        self.cat_shock_ticks = 0
+        self.cat_emote_ticks = 0
+        self.cat_emote_text = ""
+        self.cat_emote_color = "#8D85A9"
 
         self._build_ui()
         self._set_display("0", source="init")
@@ -294,18 +328,23 @@ class CalculatorApp:
             self.cat_target_x = perch
             self.cat_state = "sleep"
             self.cat_sleep_ticks = 36
+            self._set_cat_emote("♥", "#E35E9C", 12)
             return
 
         if source == "clear":
             self.cat_state = "idle"
             self.cat_push_ticks = 0
+            self.cat_shock_ticks = 0
             self.cat_target_x = self.cat_min_x + 12
+            self._set_cat_emote("♪", "#6E9F64", 10)
             return
 
         if text_left < self.cat_x + cat_width + 8:
             self.cat_target_x = max(self.cat_min_x, text_left - cat_width - 8)
-            self.cat_push_ticks = 18
-            self.cat_state = "idle"
+            self.cat_push_ticks = 20
+            self.cat_shock_ticks = 12
+            self.cat_state = "shock"
+            self._set_cat_emote("!?", "#D45576", 10)
         elif self.cat_push_ticks <= 0 and random.random() < 0.3:
             self.cat_target_x = random.uniform(self.cat_min_x + 10, self.cat_max_x - 10)
 
@@ -324,28 +363,29 @@ class CalculatorApp:
             return
 
         self.cat_tick += 1
-        floor_y = self.display_canvas.winfo_height() - 56
-        sleep_y = 48
+        cat_height = len(CAT_SPRITES["idle"]) * PIXEL_SCALE
+        floor_y = self.display_canvas.winfo_height() - cat_height - 10
+        sleep_y = max(24, floor_y - 22)
+        floor_y = max(20, floor_y)
 
-        if self.cat_state == "sleep" and self.cat_sleep_ticks > 0:
+        if self.cat_state == "shock" and self.cat_shock_ticks > 0:
+            self.cat_shock_ticks -= 1
+            self.cat_sleep_ticks = 0
+            self.cat_x += (self.cat_target_x - self.cat_x) * 0.4
+            self.cat_x += -1.6 if self.cat_tick % 2 == 0 else 1.6
+            self.cat_x = max(self.cat_min_x, min(self.cat_max_x, self.cat_x))
+            self.cat_y = floor_y - (2 if self.cat_tick % 2 == 0 else 0)
+            pose = "shock"
+            if self.cat_shock_ticks % 4 == 0:
+                self._set_cat_emote("!?", "#D45576", 5)
+        elif self.cat_state == "sleep" and self.cat_sleep_ticks > 0:
             self.cat_sleep_ticks -= 1
             self.cat_x += (self.cat_target_x - self.cat_x) * 0.25
             self.cat_y = sleep_y + (1 if (self.cat_tick // 8) % 2 else 0)
             pose = "sleep"
             if self.cat_sleep_ticks % 12 == 0:
-                self.display_canvas.delete("cat-z")
-                self.display_canvas.create_text(
-                    self.cat_x + 30,
-                    self.cat_y - 8,
-                    text="zZ",
-                    fill="#8D85A9",
-                    font=("Segoe UI", 12, "bold"),
-                    tags=("cat-z",),
-                )
-            elif self.cat_sleep_ticks % 4 == 0:
-                self.display_canvas.delete("cat-z")
+                self._set_cat_emote("zZ", "#8D85A9", 8)
         else:
-            self.display_canvas.delete("cat-z")
             self.cat_state = "idle"
             if self.cat_push_ticks > 0:
                 self.cat_push_ticks -= 1
@@ -363,6 +403,7 @@ class CalculatorApp:
                 pose = "blink" if self.cat_tick % 40 in {0, 1} else "idle"
 
         self._draw_cat(pose)
+        self._draw_cat_emote()
         self.root.after(90, self._animate_cat)
 
     def _draw_cat(self, pose: str) -> None:
@@ -389,6 +430,27 @@ class CalculatorApp:
                     tags=("cat",),
                 )
         self.display_canvas.tag_raise("cat")
+
+    def _set_cat_emote(self, text: str, color: str, ticks: int) -> None:
+        self.cat_emote_text = text
+        self.cat_emote_color = color
+        self.cat_emote_ticks = ticks
+
+    def _draw_cat_emote(self) -> None:
+        if not self.display_canvas:
+            return
+        self.display_canvas.delete("cat-emote")
+        if self.cat_emote_ticks <= 0:
+            return
+        self.cat_emote_ticks -= 1
+        self.display_canvas.create_text(
+            self.cat_x + 34,
+            self.cat_y - 8,
+            text=self.cat_emote_text,
+            fill=self.cat_emote_color,
+            font=("Segoe UI", 12, "bold"),
+            tags=("cat-emote",),
+        )
 
     @staticmethod
     def _format_number(value: float) -> str:
