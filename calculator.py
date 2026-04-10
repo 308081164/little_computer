@@ -145,6 +145,7 @@ class CalculatorApp:
         self.cat_emote_ticks = 0
         self.cat_emote_text = ""
         self.cat_emote_color = "#8D85A9"
+        self.last_input_length = 1
 
         self._build_ui()
         self._set_display("0", source="init")
@@ -329,6 +330,7 @@ class CalculatorApp:
             self.cat_state = "sleep"
             self.cat_sleep_ticks = 36
             self._set_cat_emote("♥", "#E35E9C", 12)
+            self.last_input_length = len(text)
             return
 
         if source == "clear":
@@ -337,6 +339,21 @@ class CalculatorApp:
             self.cat_shock_ticks = 0
             self.cat_target_x = self.cat_min_x + 12
             self._set_cat_emote("♪", "#6E9F64", 10)
+            self.last_input_length = 1
+            return
+
+        current_len = len(text)
+        grew = current_len > self.last_input_length
+        self.last_input_length = current_len
+
+        if grew and current_len >= 2:
+            push_distance = min(14.0, 4.0 + current_len * 0.65)
+            front_x = min(self.cat_x, self.cat_target_x)
+            self.cat_target_x = max(self.cat_min_x, front_x - push_distance)
+            self.cat_push_ticks = 22
+            self.cat_shock_ticks = 14
+            self.cat_state = "shock"
+            self._set_cat_emote("!?", "#D45576", 14)
             return
 
         if text_left < self.cat_x + cat_width + 8:
